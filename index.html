@@ -18,6 +18,9 @@
         .progress-bar-fill {
             transition: width 0.3s ease-in-out;
         }
+        .error-text {
+            color: #ef4444; /* red-500 */
+        }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -158,13 +161,15 @@
                      <h2 class="text-2xl font-bold text-slate-800">Section 2: School Revenue Avenues</h2>
                      <p class="text-slate-600 mt-2">To keep tuition affordable, schools often explore other sources of revenue. Please select up to **three** initiatives you would be most likely to support or participate in.</p>
                      <div class="mt-6 space-y-3">
-                         <label class="block p-4 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="revenueAvenues" value="After-School Programs" class="form-checkbox"> Enhanced After-School Programs (e.g., Coding, Robotics, Arts)</label>
-                         <label class="block p-4 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="revenueAvenues" value="Summer Camps" class="form-checkbox"> Summer & Weekend Camps (Open to the public)</label>
-                         <label class="block p-4 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="revenueAvenues" value="Facility Rentals" class="form-checkbox"> School Facility Rentals (for community events on weekends)</label>
-                         <label class="block p-4 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="revenueAvenues" value="Corporate Sponsorships" class="form-checkbox"> Corporate Sponsorships & Banners</label>
-                         <label class="block p-4 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="revenueAvenues" value="Fundraising Gala" class="form-checkbox"> Annual Fundraising Gala / Dinner</label>
-                         <label class="block p-4 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="revenueAvenues" value="Alumni Program" class="form-checkbox"> Alumni Donation Program</label>
-                         <label class="block p-4 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="revenueAvenues" value="School Store" class="form-checkbox"> School Spirit Store (Merchandise)</label>
+                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="After-School Programs" class="form-checkbox"> Enhanced After-School Programs (e.g., Coding, Robotics, Arts)</label>
+                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Summer Camps" class="form-checkbox"> Summer & Weekend Camps (Open to the public)</label>
+                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Optional Service Charges" class="form-checkbox"> Slight increase in charges for optional services (e.g., hot lunch, field trips)</label>
+                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Community Events" class="form-checkbox"> Participating in local community events/festivals to raise funds</label>
+                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Publicity and Sponsorships" class="form-checkbox"> Seeking media publicity and corporate sponsorships</label>
+                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Expand Fundraising Committee" class="form-checkbox"> Expanding the parent fundraising committee to recruit more volunteers</label>
+                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Fundraising Gala" class="form-checkbox"> Annual Fundraising Gala / Dinner</label>
+                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Alumni Program" class="form-checkbox"> Alumni Donation Program</label>
+                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="School Store" class="form-checkbox"> School Spirit Store (Merchandise)</label>
                      </div>
                      <div class="mt-8 flex justify-between">
                         <button type="button" onclick="prevPage(3)" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition">Back</button>
@@ -230,13 +235,33 @@
         }
 
         function nextPage(page) {
+            // Clear previous errors
+            document.querySelectorAll('.error-text').forEach(el => el.classList.remove('error-text'));
+            let canProceed = true;
+            
             if (page === 1) {
-                if (!document.getElementById('email').checkValidity()) {
+                const emailInput = document.getElementById('email');
+                if (!emailInput.checkValidity()) {
                     alert('Please enter a valid email address to continue.');
-                    return;
+                    emailInput.previousElementSibling.classList.add('error-text');
+                    canProceed = false;
+                }
+            } else if (page === 2) {
+                const questions = ['householdIncome', 'receivesAid', 'householdType'];
+                questions.forEach(q => {
+                    const checked = document.querySelector(`input[name="${q}"]:checked`);
+                    if (!checked) {
+                        canProceed = false;
+                        // Add error class to the main label of the question group
+                        document.querySelector(`input[name="${q}"]`).closest('.space-y-2').previousElementSibling.classList.add('error-text');
+                    }
+                });
+                if (!canProceed) {
+                    alert('Please complete all required fields in this section before proceeding.');
                 }
             }
-            if (page < totalPages + 1) {
+            
+            if (canProceed && page < totalPages + 1) {
                 showPage(page + 1);
             }
         }
@@ -369,9 +394,27 @@
                 showPage(4); // Go back to the last page on error
             });
         });
+
+        document.querySelectorAll('input[name="revenueAvenues"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const checkedBoxes = document.querySelectorAll('input[name="revenueAvenues"]:checked');
+                if (checkedBoxes.length > 3) {
+                    alert('You can select up to three options.');
+                    checkbox.checked = false;
+                }
+            });
+        });
+
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const label = e.target.closest('.space-y-2').previousElementSibling;
+                if(label) label.classList.remove('error-text');
+            });
+        });
         
         // --- Initialize ---
         updateProgress();
     </script>
 </body>
 </html>
+
