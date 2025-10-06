@@ -21,6 +21,11 @@
         .error-text {
             color: #ef4444; /* red-500 */
         }
+        .hidden-field {
+            position: absolute;
+            left: -5000px;
+            top: -5000px;
+        }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -45,11 +50,15 @@
             </div>
 
             <form id="survey-form">
+               
+                <input type="text" name="user_nickname" class="hidden-field" tabindex="-1" autocomplete="off">
+                <input type="hidden" id="loadTime" name="loadTime">
+
                 <!-- Step 1: Email Validation -->
                 <div id="page-1" class="form-section active">
                     <h2 class="text-2xl font-bold text-slate-800">Anonymity & Validation</h2>
-                    <<p class="text-slate-600 mt-2">To ensure we receive one valid response per family and prevent automated entries, please enter your <strong class="text-teal-700">SVA-associated parent email address</strong> below.
-                    <br><strong class="text-teal-700">This email is ONLY used for a one-time validation check. It is stored separately and is never linked to your anonymous survey answers.</strong></p>
+                    <p class="text-slate-600 mt-2">To ensure we receive valid responses from our families and prevent automated entries, please enter your<strong class="text-teal-700">SVA-associated parent email address</strong> below.
+                    <br><strong class="text-teal-700">This email is ONLY used for a one-time validation check. It is not stored and is never linked to your anonymous survey answers.</strong></p>
                     <div class="mt-6">
                         <label for="email" class="block text-sm font-medium text-slate-700">Your SVA-Associated Parent Email</label>
                         <input type="email" id="email" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500" required>
@@ -169,7 +178,7 @@
                          <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Expand Fundraising Committee" class="form-checkbox"> Expanding the parent fundraising committee to recruit more volunteers</label>
                          <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Fundraising Gala" class="form-checkbox"> Annual Fundraising Gala / Dinner</label>
                          <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Alumni Program" class="form-checkbox"> Alumni Donation Program</label>
-                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="School Store" class="form-checkbox"> School Spirit Store (Merchandise)</label>
+                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="School Store" class="form-checkbox"> School Store (Merchandise)</label>
                      </div>
                      <div class="mt-8 flex justify-between">
                         <button type="button" onclick="prevPage(3)" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition">Back</button>
@@ -210,9 +219,12 @@
     </div>
 
     <script>
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzVIpqeOBDdAQg01qDlYLVXyZWhl8J30OT8rvZzsCOB3g9P-GtZzBKuFrfafQ55cBU/exec'; //SVA
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzVIpqeOBDdAQg01qDlYLVXyZWhl8J30OT8rvZzsCOB3g9P-GtZzBKuFrfafQ55cBU/exec'; // <-- PASTE YOUR DEPLOYED WEB APP URL HERE
         const totalPages = 4;
         let currentPage = 1;
+
+        // Set the page load time for bot detection
+        document.getElementById('loadTime').value = Date.now();
 
         // --- NAVIGATION ---
         function updateProgress() {
@@ -356,7 +368,6 @@
         // --- FORM SUBMISSION ---
         document.getElementById('survey-form').addEventListener('submit', function(e){
             e.preventDefault();
-            // FIX: Manually handle showing the loading spinner
             document.querySelectorAll('.form-section').forEach(p => p.classList.remove('active'));
             document.getElementById('loading').classList.add('active');
 
@@ -364,6 +375,8 @@
 
             const formData = {
                 email: document.getElementById('email').value,
+                user_nickname: document.querySelector('[name="user_nickname"]').value, 
+                loadTime: document.getElementById('loadTime').value, // Load time
                 pkFullDay: studentCounts.pkFullDay,
                 pkHalfDay: studentCounts.pkHalfDay,
                 elementary: studentCounts.elementary,
