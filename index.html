@@ -332,9 +332,11 @@
             totalSpan.textContent = `$${totalTuition.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         }
         
-        document.getElementById('survey-form').addEventListener('submit', function(e){
+       document.getElementById('survey-form').addEventListener('submit', function(e){
             e.preventDefault();
-            showPage('loading'); // Use showPage to handle progress bar visibility
+            document.querySelectorAll('.form-section').forEach(p => p.classList.remove('active'));
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('progress-container').style.display = 'none';
 
             const formData = {
                 email: document.getElementById('email').value,
