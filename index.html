@@ -12,20 +12,10 @@
         body { font-family: 'Inter', sans-serif; }
         .form-section { display: none; }
         .form-section.active { display: block; }
-        .counter-btn {
-            transition: background-color 0.2s;
-        }
-        .progress-bar-fill {
-            transition: width 0.3s ease-in-out;
-        }
-        .error-text {
-            color: #ef4444; /* red-500 */
-        }
-        .hidden-field {
-            position: absolute;
-            left: -5000px;
-            top: -5000px;
-        }
+        .counter-btn { transition: background-color 0.2s; }
+        .progress-bar-fill { transition: width 0.3s ease-in-out; }
+        .error-text { color: #ef4444; } /* red-500 */
+        .hidden-field { position: absolute; left: -5000px; top: -5000px; }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -38,10 +28,9 @@
         </header>
 
         <div class="bg-white p-6 sm:p-10 rounded-2xl shadow-lg border border-slate-200">
-            <!-- Progress Bar -->
-            <div class="mb-8">
+            <div id="progress-container" class="mb-8">
                 <div class="flex justify-between text-sm font-medium text-slate-600 mb-1">
-                    <span id="progress-text">Step 1 of 4: Validation</span>
+                    <span id="progress-text">Step 1 of 4: Tuition Details</span>
                     <span id="progress-percent">0%</span>
                 </div>
                 <div class="w-full bg-slate-200 rounded-full h-2.5">
@@ -50,28 +39,11 @@
             </div>
 
             <form id="survey-form">
-               
                 <input type="text" name="user_nickname" class="hidden-field" tabindex="-1" autocomplete="off">
                 <input type="hidden" id="loadTime" name="loadTime">
 
-                <!-- Step 1: Email Validation -->
+                <!-- Step 1: Section 1 - Tuition & Income -->
                 <div id="page-1" class="form-section active">
-                    <h2 class="text-2xl font-bold text-slate-800">Anonymity & Validation</h2>
-                    <p class="text-slate-600 mt-2">To ensure we receive valid responses from our families and prevent automated entries, please enter your <strong>SVA-associated parent email address</strong> below.
-                    <br> </p>   
-                    <br><strong class="text-teal-700">This email is ONLY used for a one-time validation check. It is not stored and is never linked to your anonymous survey answers.</strong></p>
-                     <br><strong>Please submit only one response per family!</strong></p>
-                    <div class="mt-6">
-                        <label for="email" class="block text-sm font-medium text-slate-700">Your SVA-Associated Parent Email</label>
-                        <input type="email" id="email" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500" required>
-                    </div>
-                    <div class="mt-8 text-right">
-                        <button type="button" onclick="nextPage(1)" class="bg-teal-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-teal-700 transition">Next</button>
-                    </div>
-                </div>
-
-                <!-- Step 2: Section 1 - Tuition & Income -->
-                <div id="page-2" class="form-section">
                     <h2 class="text-2xl font-bold text-slate-800">Section 1: Tuition & Household Details</h2>
                     <div class="mt-6 space-y-6">
                         <div>
@@ -142,7 +114,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-base font-semibold text-slate-700">c) Is your family receiving any financial assistance or any additional discounts this year?</label>
+                            <label class="block text-base font-semibold text-slate-700">c) Is your family receiving any financial assistance or multi-student discounts this year?</label>
                             <div class="mt-2 space-y-2">
                                 <label class="block"><input type="radio" name="receivesAid" value="Yes" class="form-radio"> Yes</label>
                                 <label class="block"><input type="radio" name="receivesAid" value="No" class="form-radio"> No</label>
@@ -161,14 +133,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-8 flex justify-between">
-                        <button type="button" onclick="prevPage(2)" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition">Back</button>
-                        <button type="button" onclick="nextPage(2)" class="bg-teal-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-teal-700 transition">Next</button>
+                    <div class="mt-8 text-right">
+                        <button type="button" onclick="nextPage(1)" class="bg-teal-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-teal-700 transition">Next</button>
                     </div>
                 </div>
 
-                <!-- Step 3: Section 2 - Revenue Avenues -->
-                <div id="page-3" class="form-section">
+                <div id="page-2" class="form-section">
                      <h2 class="text-2xl font-bold text-slate-800">Section 2: School Revenue Avenues</h2>
                      <p class="text-slate-600 mt-2">To keep tuition affordable, schools often explore other sources of revenue. Please select up to **three** initiatives you would be most likely to support or participate in.</p>
                      <div class="mt-6 space-y-3">
@@ -180,20 +150,33 @@
                          <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Expand Fundraising Committee" class="form-checkbox"> Expanding the parent fundraising committee to recruit more volunteers</label>
                          <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Fundraising Gala" class="form-checkbox"> Annual Fundraising Gala / Dinner</label>
                          <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="Alumni Program" class="form-checkbox"> Alumni Donation Program</label>
-                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="School Store" class="form-checkbox"> School Store (Merchandise)</label>
+                         <label class="block p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"><input type="checkbox" name="revenueAvenues" value="School Store" class="form-checkbox"> School Spirit Store (Merchandise)</label>
                      </div>
                      <div class="mt-8 flex justify-between">
-                        <button type="button" onclick="prevPage(3)" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition">Back</button>
-                        <button type="button" onclick="nextPage(3)" class="bg-teal-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-teal-700 transition">Next</button>
+                        <button type="button" onclick="prevPage(2)" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition">Back</button>
+                        <button type="button" onclick="nextPage(2)" class="bg-teal-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-teal-700 transition">Next</button>
                     </div>
                 </div>
 
-                <!-- Step 4: Section 3 - General Feedback -->
-                <div id="page-4" class="form-section">
+                <div id="page-3" class="form-section">
                     <h2 class="text-2xl font-bold text-slate-800">Section 3: General Feedback</h2>
                     <p class="text-slate-600 mt-2">Do you have any additional feedback, ideas, or concerns regarding tuition, fundraising, or the financial health of the school? Your honest and constructive input is highly valued.</p>
                     <div class="mt-6">
                         <textarea id="generalFeedback" rows="6" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"></textarea>
+                    </div>
+                    <div class="mt-8 flex justify-between">
+                        <button type="button" onclick="prevPage(3)" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition">Back</button>
+                        <button type="button" onclick="nextPage(3)" class="bg-teal-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-teal-700 transition">Next</button>
+                    </div>
+                </div>
+                
+                <div id="page-4" class="form-section">
+                    <h2 class="text-2xl font-bold text-slate-800">Final Step: Optional Validation</h2>
+                    <p class="text-slate-600 mt-2">Providing your email helps us ensure we receive one response per family and filters out spam, which makes this data much more reliable for the school board.
+                    <br><strong class="text-teal-700">Your email is never linked to your answers.</strong> If you prefer to remain completely anonymous, you may leave this field blank.</p>
+                    <div class="mt-6">
+                        <label for="email" class="block text-sm font-medium text-slate-700">Your SVA-Associated Email (Optional)</label>
+                        <input type="email" id="email" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
                     </div>
                     <div class="mt-8 flex justify-between">
                         <button type="button" onclick="prevPage(4)" class="bg-slate-200 text-slate-800 font-semibold py-2 px-6 rounded-lg hover:bg-slate-300 transition">Back</button>
@@ -202,14 +185,12 @@
                 </div>
             </form>
 
-            <!-- Step 5: Thank You Page -->
             <div id="page-5" class="form-section text-center">
                  <h2 class="text-3xl font-bold text-teal-600">Thank You!</h2>
                  <p class="text-slate-600 mt-4 text-lg">Your submission has been recorded anonymously. Your feedback is invaluable in helping us plan for a sustainable and accessible future for all SVA students.</p>
                  <p class="text-sm mt-4 text-slate-500">You may now close this window.</p>
             </div>
             
-            <!-- Loading Spinner -->
             <div id="loading" class="form-section text-center p-8">
                 <svg class="animate-spin h-10 w-10 text-teal-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -221,24 +202,23 @@
     </div>
 
     <script>
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzVIpqeOBDdAQg01qDlYLVXyZWhl8J30OT8rvZzsCOB3g9P-GtZzBKuFrfafQ55cBU/exec'; // <-- PASTE YOUR DEPLOYED WEB APP URL HERE
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzVIpqeOBDdAQg01qDlYLVXyZWhl8J30OT8rvZzsCOB3g9P-GtZzBKuFrfafQ55cBU/exec'; 
         const totalPages = 4;
         let currentPage = 1;
 
-        // Set the page load time for bot detection
         document.getElementById('loadTime').value = Date.now();
 
-        // --- NAVIGATION ---
         function updateProgress() {
             const percent = ((currentPage - 1) / totalPages) * 100;
             document.getElementById('progress-bar').style.width = `${percent}%`;
             document.getElementById('progress-percent').textContent = `${Math.round(percent)}%`;
             let stepText = `Step ${currentPage} of ${totalPages}`;
-            if(currentPage === 1) stepText += ": Validation";
-            if(currentPage === 2) stepText += ": Tuition Details";
-            if(currentPage === 3) stepText += ": Revenue Avenues";
-            if(currentPage === 4) stepText += ": General Feedback";
+            if(currentPage === 1) stepText += ": Tuition Details";
+            if(currentPage === 2) stepText += ": Revenue Avenues";
+            if(currentPage === 3) stepText += ": General Feedback";
+            if(currentPage === 4) stepText += ": Validation";
             document.getElementById('progress-text').textContent = stepText;
+            document.getElementById('progress-container').style.visibility = currentPage > totalPages ? 'hidden' : 'visible';
         }
 
         function showPage(pageNumber) {
@@ -249,30 +229,18 @@
         }
 
         function nextPage(page) {
-            // Clear previous errors
             document.querySelectorAll('.error-text').forEach(el => el.classList.remove('error-text'));
             let canProceed = true;
             
             if (page === 1) {
-                const emailInput = document.getElementById('email');
-                if (!emailInput.checkValidity()) {
-                    alert('Please enter a valid email address to continue.');
-                    emailInput.previousElementSibling.classList.add('error-text');
-                    canProceed = false;
-                }
-            } else if (page === 2) {
                 const questions = ['householdIncome', 'receivesAid', 'householdType'];
                 questions.forEach(q => {
-                    const checked = document.querySelector(`input[name="${q}"]:checked`);
-                    if (!checked) {
+                    if (!document.querySelector(`input[name="${q}"]:checked`)) {
                         canProceed = false;
-                        // Add error class to the main label of the question group
                         document.querySelector(`input[name="${q}"]`).closest('.space-y-2').previousElementSibling.classList.add('error-text');
                     }
                 });
-                if (!canProceed) {
-                    alert('Please complete all required fields in this section before proceeding.');
-                }
+                if (!canProceed) alert('Please complete all required fields in this section.');
             }
             
             if (canProceed && page < totalPages + 1) {
@@ -285,13 +253,8 @@
             }
         }
 
-        // --- TUITION CALCULATOR ---
-        const studentCounts = {
-            pkFullDay: 0, pkHalfDay: 0, elementary: 0, middleSchool: 0
-        };
-        const tuitions = {
-            pkFullDay: 16900, pkHalfDay: 15500, elementary: 11900, middleSchool: 13500
-        };
+        const studentCounts = { pkFullDay: 0, pkHalfDay: 0, elementary: 0, middleSchool: 0 };
+        const tuitions = { pkFullDay: 16900, pkHalfDay: 15500, elementary: 11900, middleSchool: 13500 };
 
         document.querySelectorAll('.counter-btn').forEach(button => {
             button.addEventListener('click', () => {
@@ -299,13 +262,8 @@
                 const groupName = groupDiv.dataset.group;
                 const countSpan = groupDiv.querySelector('.count');
                 let count = parseInt(countSpan.textContent);
-
-                if (button.classList.contains('plus') && count < 6) {
-                    count++;
-                } else if (button.classList.contains('minus') && count > 0) {
-                    count--;
-                }
-                
+                if (button.classList.contains('plus') && count < 6) count++;
+                else if (button.classList.contains('minus') && count > 0) count--;
                 countSpan.textContent = count;
                 studentCounts[groupName] = count;
                 calculateTuition();
@@ -317,11 +275,9 @@
             const detailsDiv = document.getElementById('tuition-details');
             const totalSpan = document.getElementById('total-tuition');
             detailsDiv.innerHTML = '';
-
             let totalTuition = 0;
             const k8Students = [];
 
-            // Calculate Pre-K tuition (no discounts)
             if (studentCounts.pkFullDay > 0) {
                 const subtotal = studentCounts.pkFullDay * tuitions.pkFullDay;
                 totalTuition += subtotal;
@@ -333,62 +289,47 @@
                 detailsDiv.innerHTML += `<div>Pre-K (Half-Day): ${studentCounts.pkHalfDay} x ${tuitions.pkHalfDay.toLocaleString()} = ${subtotal.toLocaleString()}</div>`;
             }
             
-            // Collect K-8 students for discount calculation
             for (let i = 0; i < studentCounts.elementary; i++) k8Students.push(tuitions.elementary);
             for (let i = 0; i < studentCounts.middleSchool; i++) k8Students.push(tuitions.middleSchool);
 
-            // Sort by tuition to apply discount to the cheapest first
-            k8Students.sort((a, b) => a - b);
+            k8Students.sort((a, b) => b - a); // Sort descending to apply discount to lower amounts
             
             let baseK8Tuition = 0;
             let discountAmount = 0;
 
             k8Students.forEach((tuition, index) => {
                 baseK8Tuition += tuition;
-                if (index > 0) { // Discount applies from the second K-8 student onwards
+                if (index > 0) {
                     discountAmount += tuition * 0.10;
                 }
             });
 
-            if (baseK8Tuition > 0) {
-                detailsDiv.innerHTML += `<div>Elementary/Middle Base Tuition: $${baseK8Tuition.toLocaleString()}</div>`;
-            }
-            if (discountAmount > 0) {
-                 detailsDiv.innerHTML += `<div class="text-green-600">Multi-Student Discount: -$${discountAmount.toLocaleString()}</div>`;
-            }
+            if (baseK8Tuition > 0) detailsDiv.innerHTML += `<div>Elementary/Middle Base Tuition: $${baseK8Tuition.toLocaleString()}</div>`;
+            if (discountAmount > 0) detailsDiv.innerHTML += `<div class="text-green-600">Multi-Student Discount: -$${discountAmount.toLocaleString()}</div>`;
 
             totalTuition += (baseK8Tuition - discountAmount);
-
-            if (totalTuition > 0) {
-                breakdownContainer.classList.remove('hidden');
-            } else {
-                breakdownContainer.classList.add('hidden');
-            }
+            breakdownContainer.style.display = totalTuition > 0 ? 'block' : 'none';
             totalSpan.textContent = `$${totalTuition.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         }
         
-        // --- FORM SUBMISSION ---
         document.getElementById('survey-form').addEventListener('submit', function(e){
             e.preventDefault();
             document.querySelectorAll('.form-section').forEach(p => p.classList.remove('active'));
             document.getElementById('loading').classList.add('active');
-
-            const selectedAvenues = Array.from(document.querySelectorAll('input[name="revenueAvenues"]:checked')).map(cb => cb.value);
+            document.getElementById('progress-container').style.visibility = 'hidden';
 
             const formData = {
                 email: document.getElementById('email').value,
-                user_nickname: document.querySelector('[name="user_nickname"]').value, 
-                loadTime: document.getElementById('loadTime').value, // Load time
-                pkFullDay: studentCounts.pkFullDay,
-                pkHalfDay: studentCounts.pkHalfDay,
-                elementary: studentCounts.elementary,
-                middleSchool: studentCounts.middleSchool,
+                user_nickname: document.querySelector('[name="user_nickname"]').value,
+                loadTime: document.getElementById('loadTime').value,
+                pkFullDay: studentCounts.pkFullDay, pkHalfDay: studentCounts.pkHalfDay,
+                elementary: studentCounts.elementary, middleSchool: studentCounts.middleSchool,
                 totalTuition: document.getElementById('total-tuition').textContent,
                 tuitionLooksOk: document.querySelector('input[name="tuitionLooksOk"]:checked')?.value || 'N/A',
                 householdIncome: document.querySelector('input[name="householdIncome"]:checked')?.value || 'N/A',
                 receivesAid: document.querySelector('input[name="receivesAid"]:checked')?.value || 'N/A',
                 householdType: document.querySelector('input[name="householdType"]:checked')?.value || 'N/A',
-                revenueAvenues: selectedAvenues,
+                revenueAvenues: Array.from(document.querySelectorAll('input[name="revenueAvenues"]:checked')).map(cb => cb.value),
                 generalFeedback: document.getElementById('generalFeedback').value
             };
 
@@ -398,20 +339,17 @@
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(formData)
             })
-            .then(() => {
-                showPage(5);
-            })
+            .then(() => { showPage(5); })
             .catch(error => {
                 console.error('Error:', error);
                 alert(`Submission failed due to a network error. Please try again.`);
-                showPage(4); // Go back to the last page on error
+                showPage(4);
             });
         });
 
         document.querySelectorAll('input[name="revenueAvenues"]').forEach(checkbox => {
             checkbox.addEventListener('change', () => {
-                const checkedBoxes = document.querySelectorAll('input[name="revenueAvenues"]:checked');
-                if (checkedBoxes.length > 3) {
+                if (document.querySelectorAll('input[name="revenueAvenues"]:checked').length > 3) {
                     alert('You can select up to three options.');
                     checkbox.checked = false;
                 }
@@ -425,11 +363,11 @@
             });
         });
         
-        // --- Initialize ---
         updateProgress();
     </script>
 </body>
 </html>
+
 
 
 
